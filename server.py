@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 import qrcode
 from io import BytesIO
 import base64
+from extensions import db
+from models import User
 
 # Cargar variables de entorno
 load_dotenv()
@@ -29,7 +31,7 @@ if os.getenv('FLASK_ENV') != 'production':
     app.config['SERVER_NAME'] = os.getenv('SERVER_NAME', None)
 
 # Inicializar extensiones
-db = SQLAlchemy(app)
+db.init_app(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'auth.login'
 
@@ -38,24 +40,6 @@ from auth import auth as auth_blueprint
 app.register_blueprint(auth_blueprint)
 
 # Modelos
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    password_hash = db.Column(db.String(120), nullable=False)
-    role = db.Column(db.String(20), nullable=False)  # 'admin', 'mozo', 'cocina'
-    
-    def is_authenticated(self):
-        return True
-        
-    def is_active(self):
-        return True
-        
-    def is_anonymous(self):
-        return False
-        
-    def get_id(self):
-        return str(self.id)
-    
 class Mesa(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     numero = db.Column(db.Integer, unique=True, nullable=False)
