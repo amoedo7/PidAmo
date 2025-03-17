@@ -44,7 +44,7 @@ def actualizar_git():
     
     # Subir cambios
     print("\n☁️ Subiendo cambios a GitHub...")
-    if not run_command("git push origin master"):
+    if not run_command("git push origin main"):
         return False
     
     return True
