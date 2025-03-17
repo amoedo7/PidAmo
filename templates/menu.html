@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block title %}PidAmo - Menú{% endblock %}
+
+{% block content %}
+<div class="menu-container">
+    <div class="menu-section">
+        <div class="menu-header">
+            <h1>Nuestro Menú</h1>
+            <div class="menu-filters">
+                <button class="btn btn-secondary active" data-category="todos">Todos</button>
+                <button class="btn btn-secondary" data-category="entradas">Entradas</button>
+                <button class="btn btn-secondary" data-category="principales">Principales</button>
+                <button class="btn btn-secondary" data-category="postres">Postres</button>
+                <button class="btn btn-secondary" data-category="bebidas">Bebidas</button>
+            </div>
+        </div>
+
+        <div class="menu-grid">
+            {% for producto in productos %}
+            <div class="menu-item" data-id="{{ producto.id }}" data-category="{{ producto.categoria }}">
+                <img src="{{ producto.imagen_url }}" alt="{{ producto.nombre }}">
+                <div class="menu-item-content">
+                    <h3 class="menu-item-name">{{ producto.nombre }}</h3>
+                    <p class="menu-item-description">{{ producto.descripcion }}</p>
+                    <div class="menu-item-footer">
+                        <span class="menu-item-price" data-price="{{ producto.precio }}">
+                            ${{ "%.2f"|format(producto.precio) }}
+                        </span>
+                        <button class="btn btn-primary add-to-cart">
+                            <i class="fas fa-plus"></i> Agregar
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="cart-section">
+        <div class="cart-container">
+            <h2>Tu Pedido</h2>
+            <div id="cart-items"></div>
+            <div class="cart-summary">
+                <div id="cart-total">Total: $0.00</div>
+                <form id="order-form" data-mesa-id="{{ mesa_id }}">
+                    <textarea name="notas" class="form-control" placeholder="Notas adicionales para tu pedido..."></textarea>
+                    <button type="submit" class="btn btn-primary">
+                        Realizar Pedido
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.menu-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+}
+
+.menu-header {
+    margin-bottom: 2rem;
+}
+
+.menu-filters {
+    margin: 1rem 0;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.menu-filters .btn {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+}
+
+.menu-filters .btn.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.menu-item {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.menu-item:hover {
+    transform: translateY(-5px);
+}
+
+.menu-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.menu-item-content {
+    padding: 1rem;
+}
+
+.menu-item-name {
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.menu-item-description {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.menu-item-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-section {
+    position: sticky;
+    top: 80px;
+    height: calc(100vh - 100px);
+}
+
+.cart-container {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.cart-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item input {
+    width: 60px;
+    padding: 0.3rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.cart-summary {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 2px solid #eee;
+}
+
+#cart-total {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 992px) {
+    .menu-container {
+        grid-template-columns: 1fr;
+    }
+
+    .cart-section {
+        position: static;
+        height: auto;
+    }
+}
+</style>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Filtrado de categorías
+    const filterButtons = document.querySelectorAll('.menu-filters button');
+    const menuItems = document.querySelectorAll('.menu-item');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const category = button.dataset.category;
+            
+            // Actualizar botones activos
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            // Filtrar items
+            menuItems.forEach(item => {
+                if (category === 'todos' || item.dataset.category === category) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %}
+{% endblock %} 
