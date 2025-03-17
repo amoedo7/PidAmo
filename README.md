@@ -97,4 +97,4 @@ Si deseas contribuir al proyecto, por favor sigue estos pasos:
 4. Envía un pull request describiendo tus cambios.
 
 ## Licencia
-Este proyecto está bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles. 
+Este proyecto está bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.
