@@ -17,13 +17,8 @@ load_dotenv()
 app = Flask(__name__)
 
 # Configuración
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-key-change-in-production')
-
-# Configuración de la base de datos
-database_url = os.getenv('DATABASE_URL')
-if database_url and database_url.startswith("postgres://"):
-    database_url = database_url.replace("postgres://", "postgresql://", 1)
-app.config['SQLALCHEMY_DATABASE_URI'] = database_url or 'sqlite:///pidamo.db'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///pidamo.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Remover SERVER_NAME en producción para evitar problemas con el proxy
@@ -32,7 +27,8 @@ if os.getenv('FLASK_ENV') != 'production':
 
 # Inicializar extensiones
 db.init_app(app)
-login_manager = LoginManager(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
 login_manager.login_view = 'auth.login'
 
 # Importar modelos y blueprint de autenticación
@@ -223,8 +219,10 @@ def actualizar_estado_pedido(pedido_id):
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
+# Crear tablas de la base de datos
+with app.app_context():
+    db.create_all()
+
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()  # Crear tablas de la base de datos
-    port = int(os.getenv('PORT', 5000))
+    port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port) 
