@@ -18,6 +18,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-key-change-in-production')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///pidamo.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SERVER_NAME'] = os.getenv('SERVER_NAME', None)  # Para manejar el dominio en producción
 
 # Inicializar extensiones
 db = SQLAlchemy(app)
