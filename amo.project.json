@@ -1,0 +1,14 @@
+{
+  "schema": "desarrollamo.project.v1",
+  "repository": "amoedo7/PidAmo",
+  "name": "PidAmo",
+  "ecosystem": "DesarrollAMO",
+  "type": "product-prototype",
+  "lifecycle": "historical-functional",
+  "visibility": "public",
+  "source_of_truth": "historical-canonical",
+  "production_url": null,
+  "related": ["amoedo7/PidAmoFrontend", "amoedo7/PidAmoBackend"],
+  "reviewed_at": "2026-08-18",
+  "notes": ["Canonical repository for the historical PidAmo implementation.", "Frontend and backend placeholder repos do not contain complete independent implementations."]
+}
