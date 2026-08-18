@@ -1,100 +1,80 @@
-# PidAmo - Sistema de Pedidos para Restaurantes y Bares
+# PidAmo
 
-**PidAmo** es una aplicación web diseñada para facilitar la toma de pedidos en restaurantes y bares mediante una interfaz web accesible para los clientes. El sistema permite a los usuarios realizar pedidos desde sus mesas escaneando un QR único, visualizar menús, realizar pagos y gestionar la atención de los mozos, todo desde un único dispositivo móvil. Los propietarios pueden ver el estado de las mesas y el progreso de los pedidos en tiempo real a través de un panel de administración.
+Sistema web experimental para **pedidos en restaurantes, bares y comercios gastronómicos mediante QR**, creado dentro del ecosistema DesarrollAMO.
 
-## Tabla de Contenidos
-1. [Descripción](#descripción)
-2. [Características](#características)
-3. [Tecnologías Usadas](#tecnologías-usadas)
-4. [Estructura del Proyecto](#estructura-del-proyecto)
-5. [Instalación y Configuración](#instalación-y-configuración)
-6. [Despliegue en Render](#despliegue-en-render)
-7. [Cómo Contribuir](#cómo-contribuir)
-8. [Licencia](#licencia)
+## Estado
 
-## Descripción
-PidAmo es una aplicación web que facilita el proceso de pedidos en restaurantes, bares y heladerías, mejorando la experiencia del cliente y la gestión operativa. Permite realizar pedidos, hacer pagos y gestionar la cocina, barra y atención de mesas de manera centralizada.
+**Prototipo funcional histórico.** Dentro de los tres repos `PidAmo`, `PidAmoFrontend` y `PidAmoBackend`, este es el que contiene la implementación sustancial de aquella etapa: servidor Flask, autenticación, modelos, templates y assets.
 
-**Funcionalidades clave:**
-- Generación de un QR único para cada mesa.
-- Visualización de menús de productos (pizza, hamburguesas, cervezas, etc.).
-- Sistema de pago integrado (con opciones de pago en efectivo o tarjeta).
-- Visualización del estado de los pedidos por parte de la cocina y el bar.
-- Monitoreo en tiempo real por parte del dueño del restaurante.
+Los repos `PidAmoFrontend` y `PidAmoBackend` quedaron esencialmente como placeholders y no deben confundirse con implementaciones independientes completas.
 
-## Características
-- **Backend**: Python con Flask
-- **Frontend**: HTML, CSS, JavaScript (Vanilla o Frameworks como React si es necesario)
-- **Base de datos**: Base de datos SQL (Se puede adaptar a MySQL o SQLite)
-- **Panel de administración** para propietarios de restaurantes.
-- **Interfaz de cliente optimizada** para smartphones y dispositivos móviles.
-- **Modo offline** para operar sin conexión a internet.
+## Idea del producto
 
-## Tecnologías Usadas
-- **Flask**: Para el backend y la gestión de las rutas de la aplicación.
-- **HTML/CSS/JavaScript**: Para el desarrollo del frontend, creando una experiencia de usuario simple y directa.
-- **SQLite/MySQL**: Para el almacenamiento de los datos de pedidos, usuarios y productos.
-- **Render**: Para el despliegue de la aplicación en la nube.
-
-## Estructura del Proyecto
-El proyecto está organizado de la siguiente manera:
-
+```text
+mesa / cliente
+      ↓ QR
+menú → pedido → estado → atención
+      ↓
+panel de operación
 ```
+
+El objetivo era reducir fricción en la toma de pedidos y dar al negocio una vista central de mesas, cocina/bar y atención.
+
+## Stack histórico
+
+- Python / Flask;
+- HTML, CSS y JavaScript;
+- modelos y autenticación propios;
+- templates server-side;
+- despliegue pensado para Render;
+- persistencia SQL/SQLite según la etapa.
+
+## Estructura principal
+
+```text
 PidAmo/
-│
-├── server.py           # Backend de la aplicación (Flask)
-├── static/            # Archivos estáticos (CSS, JS, imágenes)
-│   ├── script.js
-│   └── style.css
-├── templates/         # Archivos HTML
-│   ├── index.html
-│   ├── menu.html
-│   ├── mozos.html
-│   ├── cocina.html
-│   └── boss.html
-├── .gitignore        # Archivos y directorios a ignorar por Git
-└── requirements.txt  # Dependencias de Python (Flask, etc.)
+├── server.py
+├── auth.py
+├── models.py
+├── extensions.py
+├── templates/
+├── static/
+├── requirements.txt
+└── Procfile
 ```
 
-## Instalación y Configuración
-
-### 1. Clonar el Repositorio
-Clona este repositorio en tu máquina local:
+## Ejecución local
 
 ```bash
-git clone https://github.com/tu_usuario/PidAmo.git
+git clone https://github.com/amoedo7/PidAmo.git
 cd PidAmo
+python -m venv .venv
+# activar el entorno según tu sistema
+pip install -r requirements.txt
+python server.py
 ```
 
-## Despliegue en Render
-Para desplegar la aplicación en Render, sigue estos pasos:
+## Antes de reutilizarlo
 
-1. **Subir el Proyecto a GitHub**
-   Asegúrate de que tu repositorio esté en GitHub o en otro servicio de control de versiones.
+Este código es anterior a la arquitectura actual de DesarrollAMO. Antes de ponerlo en producción hay que revisar:
 
-2. **Crear una Cuenta en Render**
-   Si no tienes una cuenta en Render, regístrate e inicia sesión.
+- secretos y configuración por variables de entorno;
+- autenticación y sesiones;
+- esquema y migraciones de base de datos;
+- CSRF/rate limiting según endpoints;
+- dependencias;
+- flujo de pagos: no asumir que un estado interno equivale a pago real;
+- responsive/accessibility;
+- observabilidad y backups.
 
-3. **Crear un Nuevo Servicio**
-   En Render, crea un nuevo servicio seleccionando "Web Service". Luego, vincula tu repositorio de GitHub.
+## Relación con DesarrollAMO
 
-4. **Configuración del Proyecto en Render**
-   - En el panel de configuración de Render, asegúrate de que la opción para el servicio sea Python.
-   - Asegúrate de especificar la ruta del archivo de inicio, que es server.py.
-   - Render detectará automáticamente las dependencias desde el archivo requirements.txt.
-
-5. **Desplegar**
-   Render iniciará el despliegue y te proporcionará una URL pública para acceder a la aplicación.
-
-**Nota**: Si tu aplicación requiere una base de datos, puedes usar Render PostgreSQL o MySQL para configurar una base de datos en la nube.
-
-## Cómo Contribuir
-Si deseas contribuir al proyecto, por favor sigue estos pasos:
-
-1. Haz un fork del repositorio.
-2. Crea una rama para tu nueva funcionalidad (git checkout -b feature-nueva-funcionalidad).
-3. Haz tus cambios y realiza un commit (git commit -m 'Añadí nueva funcionalidad').
-4. Envía un pull request describiendo tus cambios.
+PidAmo sigue siendo una buena referencia de producto vertical: una necesidad concreta convertida en interfaz + operación + backend. Se conserva como prototipo y material reutilizable, no como servicio actual garantizado.
 
 ## Licencia
-Este proyecto está bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.
+
+El README histórico mencionaba MIT, pero este repositorio no muestra actualmente un archivo `LICENSE` en su raíz. No asumir una licencia hasta que se defina explícitamente.
+
+---
+
+**DesarrollAMO** · producto histórico preservado con su contexto técnico real.
